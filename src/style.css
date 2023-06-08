@@ -1,0 +1,233 @@
+/**
+It's quite obvious aesthetics aren't that high on the priority list. Or my interests.
+That being said, I think I wanna add postcss.
+
+Still doing fine with just one file, but maybe I ought to just move the non-reusable parts
+to separate x-view.css and import in the x-view.ts.
+**/
+body {
+  font-family: sans;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+input {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.login-view {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-box {
+  border: 1px solid gray;
+  padding: 4rem;
+  background-color: aliceblue;
+}
+
+.map-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.map-view > .content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.map-view > .content > {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.map-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.users-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.users-view > ul {
+  border: 1px solid gray;
+  padding: 1rem;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+}
+.users-view > ul > li {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+.users-view > ul > li > div {
+  display: flex;
+  justify-content: space-between;
+}
+.users-view > ul > li > div > label {
+  margin-right: 2rem;
+}
+
+.logs-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.logs-view > ul {
+  border: 1px solid gray;
+  padding: 1rem;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  margin-left: 4rem;
+  margin-right: 4rem;
+  margin-bottom: 4rem;
+}
+.logs-view > ul > li {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid gray;
+}
+.logs-view > ul > li > div {
+  display: flex;
+}
+.logs-view > ul > li > div > .time {
+  white-space: nowrap;
+  padding-right: 1rem;
+  margin-right: 1rem;
+  border-right: 1px solid gray;
+}
+.logs-view > ul > li > div > .msg {
+  white-space: nowrap;
+  margin-right: 4rem;
+}
+.logs-view > ul > li > div > .payload {
+  font-family: monospace;
+  text-align: right;
+  margin-left: auto;
+}
+.maps-view {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.map {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+.map > .row {
+  display: flex;
+}
+
+.square {
+  display: flex;
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border-left: 1px solid gray;
+  border-top: 1px solid gray;
+  font-size: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+.square.wall {
+  background-color: ghostwhite;
+}
+.square.water {
+  background-color: dodgerblue;
+}
+
+.square.grass {
+  background-color: darkolivegreen;
+}
+.square.dirt {
+  background-color: saddlebrown;
+}
+.square.dirt2 {
+  background-color: sienna;
+}
+
+.square:hover::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  top: 0;
+  border: 1px solid gold;
+}
+.square.selected::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  mix-blend-mode: difference;
+  background-color: white;
+  border-radius: 4rem;
+}
+.square.has-obj {
+  cursor: pointer;
+}
+.top-nav {
+  background-color: papayawhip;
+  border-bottom: 1px solid gray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.top-nav > ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+.top-nav > ul > li {
+  display: block;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.top-nav > ul > li:hover {
+  color: gray;
+}
+.top-nav > ul > li.selected {
+  text-decoration: underline;
+}
+.top-nav > .user-tag {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.top-nav > .pause-tag {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.selected-obj {
+  border: 1px solid gray;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+.selected-obj > div > .char {
+  border: 1px solid red;
+}
