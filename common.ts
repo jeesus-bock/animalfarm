@@ -20,7 +20,8 @@ export enum EventTypes {
   MapUpdated = 'MAP_UPDATED',
   // Request event that server responds to with a list of all the users currently on the server.
   RequestUsers = 'REQUEST_USERS',
-  RequestMap = 'REQUEST_MAP',
+  RequestMaps = 'REQUEST_MAPS',
+  GenerateMap = 'GENERATE_MAP',
   RequestAnimal = 'REQUEST_ANIMAL',
 
   // dispatched after a map has been added to ECS
@@ -34,6 +35,9 @@ export enum EventTypes {
 
   // Reply message when user tries to connect with an existing username
   NameInUse = 'NAME_IN_USE',
+
+  // bound to document.body.onkeydown
+  KeyDown = 'KEY_DOWN',
 }
 
 export interface User {
@@ -64,6 +68,7 @@ export interface Map {
 export enum AI {
   // Moves the animal in random directions.
   RndDir = 'RANDOM_DIRECTION',
+  Still = 'STILL',
 }
 
 // These data models go on top of entities in the ECS.
@@ -94,6 +99,10 @@ export interface UiObj {
   selected?: boolean;
   velocity?: { x: number; y: number };
   ai?: AI;
+  isPlayer?: boolean;
+}
+export interface player extends UiObj {
+  isPlayer: boolean;
 }
 
 export const genMatrix = (width: number, height: number) => {

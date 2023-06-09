@@ -2,7 +2,7 @@ import { Animal, EventTypes, Map } from '../../common';
 import { EventBus } from '../event-bus';
 import { LogService } from './log-service';
 import { SocketService } from './socket-service';
-import { addMap, addAnimal } from '../ecs';
+import { setMaps, addAnimal } from '../ecs';
 
 export class MapService {
   private static instance?: MapService = undefined;
@@ -13,20 +13,20 @@ export class MapService {
     return this.instance;
   }
   constructor() {
-    EventBus.getInstance().register(EventTypes.RequestMap, this.addMap);
+    EventBus.getInstance().register(EventTypes.RequestMaps, this.setMaps);
     EventBus.getInstance().register(EventTypes.RequestAnimal, this.addAnimal);
   }
-  public requestMap = () => {
+  public requestMaps = () => {
     LogService.getInstance().addLogItem('[MapService] requesting map');
-    SocketService.getInstance().requestMap();
+    SocketService.getInstance().requestMaps();
   };
   public requestAnimal = () => {
     LogService.getInstance().addLogItem('[MapService] requesting animal');
     SocketService.getInstance().requestAnimal();
   };
-  public addMap = (map: Map) => {
-    LogService.getInstance().addLogItem('[MapService] adding map');
-    addMap(map);
+  public setMaps = (maps: Array<Map>) => {
+    LogService.getInstance().addLogItem('[MapService] setting maps');
+    setMaps(maps);
   };
   public addAnimal = (animal: Animal) => {
     LogService.getInstance().addLogItem('[MapService] adding animal', animal);

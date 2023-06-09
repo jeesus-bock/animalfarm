@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 
 import { EventTypes, User, Map } from '../common';
 import { FRONT_END_PORT, SOCKET_SERVER_PORT } from '../common';
-import { fetchGenMap, postMap } from './fetch';
+import { fetchGenMap, fetchMaps, postMap } from './fetch';
 interface ServerToClientEvents {
   [EventTypes.Tick]: () => void;
   [EventTypes.Exit]: (a: string) => void;
@@ -47,11 +47,20 @@ io.on('connection', (socket: any) => {
     console.log('Received RequestsUsers event: ', socket.handshake.auth.name, users);
     socket.emit(EventTypes.RequestUsers, users);
   });
-  socket.on(EventTypes.RequestMap, async () => {
+
+  // These handlers receive an event, contact the data server for operations
+  // and return the same event with data as payload.
+  socket.on(EventTypes.GenerateMap, async () => {
     console.log('Received RequestMap event: ', socket.handshake.auth.name);
     const map = await fetchGenMap();
     console.log(JSON.stringify(map));
-    socket.emit(EventTypes.RequestMap, map);
+    socket.emit(EventTypes.GenerateMap, map);
+  });
+  socket.on(EventTypes.RequestMaps, async () => {
+    console.log('Received RequestMaps event: ', socket.handshake.auth.name);
+    const maps = await fetchMaps();
+    console.log(JSON.stringify(maps));
+    socket.emit(EventTypes.RequestMaps, maps);
   });
   socket.on(EventTypes.CreateMap, async (map: Map) => {
     console.log('Received CreateMap event: ', socket.handshake.auth.name);

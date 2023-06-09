@@ -9,7 +9,7 @@ import { uiSystem } from './systems/ui-system';
 import { addTestData } from './test-data';
 import { EventTypes, AI, Map, Animal, GenUiObj } from '../../common';
 import { LogService } from '../services/log-service';
-import { getSelectedMap, selectMapEntity } from './helpers';
+import { getPlayer, getSelectedMap, selectMapEntity } from './helpers';
 
 // The ECS entity with components as props.
 // All are optional because the entities have just a subset of the
@@ -60,6 +60,7 @@ export class Arch {
   // Could be icons too with some effort.
   public static uiObj = world.with('id', 'position', 'ui', 'map');
   public static selectedUiObj = world.with('id', 'position', 'ui', 'map', 'selected');
+  public static player = world.with('id', 'position', 'ui', 'map', 'isPlayer');
 
   // Moving. Entities that can move.
   public static moving = world.with('position', 'velocity', 'map');
@@ -128,10 +129,34 @@ export const ECSListen = (on: boolean) => {
     unregisterTick = null;
   }
   LogService.getInstance().addLogItem('[ECS] listen to Tick is ' + (on ? 'ON' : 'OFF') + '.');
-  EventBus.getInstance().register(EventTypes.CreateMap, mapAdded);
-  EventBus.getInstance().register(EventTypes.UpdateMap, mapAdded);
 };
-const mapAdded = (map: Map) => {
+EventBus.getInstance().register(EventTypes.KeyDown, (key) => {
+  let player = getPlayer();
+  if (!player) return;
+  if (!player.velocity) world.addComponent(player, 'velocity', { x: 0, y: 0 });
+  player = getPlayer();
+  alert(JSON.stringify(player));
+  if (!player) return;
+  if (!player.velocity) return;
+
+  if (key == 'ArrowUp') {
+    player.velocity.y = -1;
+    player.velocity.x = 0;
+  }
+  if (key == 'ArrowDown') {
+    player.velocity.y = 1;
+    player.velocity.x = 0;
+  }
+  if (key == 'ArrowLeft') {
+    player.velocity.x = -1;
+    player.velocity.y = 0;
+  }
+  if (key == 'ArrowRight') {
+    player.velocity.x = 1;
+    player.velocity.y = 0;
+  }
+});
+export const mapAdded = (map: Map) => {
   alert('tässä');
   for (const ent of Arch.maps) {
     alert(ent.id);
@@ -142,8 +167,20 @@ const mapAdded = (map: Map) => {
       world.add(map);
       for (let i = 0; i < 5; i++) world.add(GenUiObj(map.dimensions.x, map.dimensions.y, map.id));
       alert('tässä2' + Object.keys(map));
-
       return;
     }
+  }
+};
+
+// Sets all the maps in the ECS.
+// Done by first removing all the maps and then adding
+// the maps passed as parameter.
+export const setMaps = (maps: Array<Map>) => {
+  for (const ent of Arch.maps) {
+    world.remove(ent);
+  }
+  for (const map of maps) {
+    world.add(map);
+    world.add({ ...GenUiObj(map.dimensions.x, map.dimensions.y, map.id), isPlayer: true, ai: AI.Still });
   }
 };

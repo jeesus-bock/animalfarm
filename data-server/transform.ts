@@ -5,6 +5,7 @@ export const mapToDBMap = (map: Map) => {
   const dbMap: DBMap = { id: map.id, name: map.name, width: map.dimensions.x, height: map.dimensions.y, matrix: matrixToString(map.matrix) };
   return dbMap;
 };
+// This needs to be able to handle nulls found from the db.
 export const dbmapToMap = (dbmap: DBMap | null) => {
   if (!dbmap) return null;
   const map: Map = { id: dbmap.id, isMap: true, name: dbmap.name, dimensions: { x: dbmap.width, y: dbmap.height }, matrix: stringToMatrix(dbmap.matrix) };

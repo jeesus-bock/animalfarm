@@ -3,12 +3,12 @@ import { DATA_SERVER_PORT, Map } from '../common';
 export const fetchGenMap = async () => {
   console.log('fetchGenMap');
   const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/maps/generate');
-  return response.json();
+  return response.json() as Promise<Map>;
 };
 export const fetchMaps = async () => {
   console.log('fetchMaps');
   const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/maps');
-  return response.json();
+  return response.json() as Promise<Array<Map>>;
 };
 
 export const postMap = async (map: Map) => {
@@ -17,5 +17,5 @@ export const postMap = async (map: Map) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(map),
   });
-  return response.json();
+  return response.json() as Promise<Map>;
 };

@@ -46,6 +46,13 @@ export const getSelectedUiObj = (): UiObj | null => {
   }
   return null;
 };
+// Get the selected UiObj or null if none selected.
+export const getPlayer = (): UiObj | null => {
+  for (const ent of Arch.player) {
+    return ent;
+  }
+  return null;
+};
 
 // Helper to switch the selected component from map entity to another. If no
 // map entity is found to be selected it throws.

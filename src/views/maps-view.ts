@@ -31,7 +31,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
       button(
         {
           onclick: () => {
-            MapService.getInstance().requestMap();
+            MapService.getInstance().requestMaps();
             UiService.getInstance().refresh();
           },
         },

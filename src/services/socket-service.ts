@@ -34,7 +34,7 @@ export class SocketService {
       const userObj = { id: this.socket?.id || '', connected: Date.now(), name: userName };
       addLogItem('[Socket] Connected to server', userObj);
       UserService.getInstance().setUser(userObj);
-      MapService.getInstance().requestMap();
+      MapService.getInstance().requestMaps();
     });
     this.socket.on(EventTypes.Enter, (user: User) => {
       LogService.getInstance().addLogItem('[Socket] Received Enter event', user);
@@ -48,9 +48,9 @@ export class SocketService {
       UserService.getInstance().setUsers(users);
       if (window.location.pathname == View.Users) UiService.getInstance().refresh();
     });
-    this.socket.on(EventTypes.RequestMap, (map: Map) => {
-      addLogItem('[Socket] Received RequestMap reply', map);
-      EventBus.getInstance().dispatch(EventTypes.RequestMap, map);
+    this.socket.on(EventTypes.RequestMaps, (maps: Array<Map>) => {
+      addLogItem('[Socket] Received RequestMap reply', maps);
+      EventBus.getInstance().dispatch(EventTypes.RequestMaps, maps);
     });
     this.socket.on(EventTypes.CreateMap, (map: Map) => {
       addLogItem('[Socket] Received CreateMap reply', { ...map, matrix: [] });
@@ -76,10 +76,10 @@ export class SocketService {
     if (!this.socket) throw new Error('Attempting to requestUsers with undefined socket');
     this.socket.emit(EventTypes.RequestUsers);
   }
-  public requestMap() {
-    LogService.getInstance().addLogItem('[Socket] sending RequestMap');
-    if (!this.socket) throw new Error('Attempting to requestMap with undefined socket');
-    this.socket.emit(EventTypes.RequestMap);
+  public requestMaps() {
+    LogService.getInstance().addLogItem('[Socket] sending RequestMaps');
+    if (!this.socket) throw new Error('Attempting to requestMaps with undefined socket');
+    this.socket.emit(EventTypes.RequestMaps);
   }
   public requestAnimal() {
     LogService.getInstance().addLogItem('[Socket] sending RequestAnimal');
