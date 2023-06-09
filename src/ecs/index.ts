@@ -7,7 +7,7 @@ import { aiSystem } from './systems/ai-system';
 import { moveSystem } from './systems/move-system';
 import { uiSystem } from './systems/ui-system';
 import { addTestData } from './test-data';
-import { EventTypes, AI, Map, Animal, GenUiObj } from '../../common';
+import { EventTypes, AI, Map, Animal, GenUiObj, UiObj } from '../../common';
 import { LogService } from '../services/log-service';
 import { getPlayer, getSelectedMap, selectMapEntity } from './helpers';
 
@@ -63,7 +63,7 @@ export class Arch {
   public static player = world.with('id', 'position', 'ui', 'map', 'isPlayer');
 
   // Moving. Entities that can move.
-  public static moving = world.with('position', 'velocity', 'map');
+  public static moving = world.with('position', 'velocity', 'map', 'isPlayer');
   // Entities with AI, they make use of velocity and position components too.
   public static ai = world.with('velocity', 'ai', 'position', 'map');
   // The map entities. Right now there's support for multiple maps of different sizes.
@@ -114,6 +114,14 @@ export const addAnimal = (animal: Animal) => {
   }
   EventBus.getInstance().dispatch(EventTypes.MapAdded);
 };
+export const addPlayer = (uiObj: UiObj) => {
+  const selectedMap = getSelectedMap();
+  world.add(uiObj);
+  if (selectedMap) {
+    world.addComponent(uiObj, 'position', { x: 2, y: 2 });
+    world.addComponent(uiObj, 'map', selectedMap.id);
+  }
+};
 
 let unregisterTick: (() => void) | null = null;
 export const ECSListen = (on: boolean) => {
@@ -130,12 +138,13 @@ export const ECSListen = (on: boolean) => {
   }
   LogService.getInstance().addLogItem('[ECS] listen to Tick is ' + (on ? 'ON' : 'OFF') + '.');
 };
-EventBus.getInstance().register(EventTypes.KeyDown, (key) => {
+
+// handle the keydown. TODO move this to player-service.
+EventBus.getInstance().register(EventTypes.KeyDown, (key: string) => {
   let player = getPlayer();
   if (!player) return;
   if (!player.velocity) world.addComponent(player, 'velocity', { x: 0, y: 0 });
   player = getPlayer();
-  alert(JSON.stringify(player));
   if (!player) return;
   if (!player.velocity) return;
 
@@ -155,18 +164,16 @@ EventBus.getInstance().register(EventTypes.KeyDown, (key) => {
     player.velocity.x = 1;
     player.velocity.y = 0;
   }
+  runSystems();
 });
 export const mapAdded = (map: Map) => {
-  alert('tässä');
   for (const ent of Arch.maps) {
-    alert(ent.id);
     if (!ent.id || ent.id == map.id) {
       world.remove(ent);
       map.selected = true;
       map.isMap = true;
       world.add(map);
       for (let i = 0; i < 5; i++) world.add(GenUiObj(map.dimensions.x, map.dimensions.y, map.id));
-      alert('tässä2' + Object.keys(map));
       return;
     }
   }
@@ -181,6 +188,5 @@ export const setMaps = (maps: Array<Map>) => {
   }
   for (const map of maps) {
     world.add(map);
-    world.add({ ...GenUiObj(map.dimensions.x, map.dimensions.y, map.id), isPlayer: true, ai: AI.Still });
   }
 };

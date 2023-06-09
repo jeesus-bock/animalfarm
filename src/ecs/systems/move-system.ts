@@ -5,7 +5,7 @@ import { getUiEntAt, getGroundAt } from '../helpers';
 export const moveSystem = () => {
   console.log('moveSystem');
   LogService.getInstance().addLogItem('[ECS] moveSystem moving ' + Arch.moving.entities.length + ' entities.');
-  for (const { position, velocity, map } of Arch.moving) {
+  for (const { position, velocity, map, isPlayer } of Arch.moving) {
     // Skip the still ones.
     if (velocity.x == 0 && velocity.y == 0) continue;
 
@@ -16,5 +16,9 @@ export const moveSystem = () => {
     }
     position.x += velocity.x;
     position.y += velocity.y;
+    if (isPlayer) {
+      velocity.y = 0;
+      velocity.x = 0;
+    }
   }
 };

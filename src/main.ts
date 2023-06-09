@@ -11,7 +11,6 @@ LogService.getInstance().addLogItem('[main] App starting...');
 // Refresh, ie. render the view.
 UiService.getInstance().refresh('main.ts');
 document.body.onkeydown = (e) => {
-  alert(e.key);
   EventBus.getInstance().dispatch(EventTypes.KeyDown, e.key);
 };
 ECSListen(true);

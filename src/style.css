@@ -229,5 +229,14 @@ input {
   padding: 1rem;
 }
 .selected-obj > div > .char {
+  font-size: 4rem;
   border: 1px solid red;
+}
+
+.flex {
+  display: flex;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
 }

@@ -9,11 +9,11 @@ import { MapService } from '../services/map-service';
 import { UiService } from '../services/ui-service';
 import { Map } from '../../common';
 import { LogService } from '../services/log-service';
+import { PlayerService } from '../services/player-service';
 const { div, select, option, label, button, input } = van.tags;
 let editedMap: Map | null = null;
 export const MapsView = (mapDiv: HTMLDivElement) => {
   editedMap = getSelectedMap();
-
   return div({ className: 'maps-view' }, [
     TopNav(),
     div([
@@ -40,7 +40,8 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
       button(
         {
           onclick: () => {
-            MapService.getInstance().requestAnimal();
+            PlayerService.getInstance().generatePlayer();
+
             UiService.getInstance().refresh();
           },
         },
@@ -65,7 +66,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
         'Refresh'
       ),
     ]),
-    div(JSON.stringify(Arch.uiObj.entities)),
+    div(JSON.stringify(Arch.player.entities)),
     div({ class: 'map-container' }, mapDiv),
   ]);
 };

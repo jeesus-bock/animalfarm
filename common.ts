@@ -71,25 +71,12 @@ export enum AI {
   Still = 'STILL',
 }
 
+export enum Species {
+  penguin = 'PENGUIN',
+  rider = 'RIDER',
+}
 // These data models go on top of entities in the ECS.
 // If typeorm is added it's entity modeling will spice things up further.
-export interface Animal {
-  id: string;
-  name: string;
-  stats: { att: number; def: number };
-  health: { hp: number; maxHp: number };
-  ui: { char: string; color: string };
-  ai: AI;
-}
-
-export interface Map {
-  id: string;
-  name: string;
-  selected?: boolean;
-  dimensions: { x: number; y: number };
-  isMap?: boolean;
-  matrix: Array<Array<number>>;
-}
 
 export interface UiObj {
   id: string;
@@ -101,6 +88,25 @@ export interface UiObj {
   ai?: AI;
   isPlayer?: boolean;
 }
+export interface Animal {
+  id: string;
+  name: string;
+  stats: { att: number; def: number };
+  health: { hp: number; maxHp: number };
+  species: Species;
+  ui: { char: string; color: string };
+  ai?: AI;
+}
+export interface UiAnimal extends Animal, UiObj {}
+export interface Map {
+  id: string;
+  name: string;
+  selected?: boolean;
+  dimensions: { x: number; y: number };
+  isMap?: boolean;
+  matrix: Array<Array<number>>;
+}
+
 export interface player extends UiObj {
   isPlayer: boolean;
 }
@@ -125,8 +131,8 @@ export const genMatrix = (width: number, height: number) => {
   return ret;
 };
 export const genMap = (): Map => {
-  const width = Math.round(Math.random() * 20 + 5);
-  const height = Math.round(Math.random() * 20 + 5);
+  const width = Math.round(Math.random() * 10 + 20);
+  const height = Math.round(Math.random() * 10 + 20);
   return {
     id: '',
     isMap: true,
