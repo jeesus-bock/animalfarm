@@ -1,4 +1,4 @@
-import { Animal, EventTypes, Map } from '../../common';
+import { EventTypes, Map, UiAnimal } from '../../common';
 import { EventBus } from '../event-bus';
 import { AnimalService } from './animal-service';
 import { ECSService } from './ecs-service';
@@ -28,7 +28,7 @@ export class MapService {
     LogService.getInstance().addLogItem('[MapService] setting maps');
     ECSService.getInstance().setMaps(maps);
   };
-  public addAnimal = (animal: Animal) => {
+  public addAnimal = (animal: UiAnimal) => {
     LogService.getInstance().addLogItem('[MapService] adding animal', animal);
     AnimalService.getInstance().addAnimal(animal);
   };

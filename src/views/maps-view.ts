@@ -44,7 +44,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
       button(
         {
           onclick: () => {
-            PlayerService.getInstance().generatePlayer();
+            PlayerService.getInstance().GeneratePlayer();
 
             UiService.getInstance().refresh();
           },

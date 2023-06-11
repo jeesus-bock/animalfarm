@@ -155,6 +155,13 @@ export const genMap = (): Map => {
   };
 };
 
+////////////7
+// Generator functions that output random animals or player
+// Camel-cased functions are module private, and the snake-cased
+// ones are exportd to public use
+//
+// The functions are here atm because i'm thinking of doing
+// the generation on the backend
 const randomGlyph = () => {
   return testEmojis[Math.floor(Math.random() * testEmojis.length)];
 };
@@ -203,5 +210,5 @@ export const GenUiAnimal = (mapWidth: number, mapHeight: number, mapId: string):
 export const GenPlayer = (mapWidth: number, mapHeight: number, mapId: string): Player => {
   const uiObj = genUiObj(mapWidth, mapHeight, mapId);
   const uiAnimalObj = genUiAnimal(uiObj);
-  return genPlayer(uiAnimalObj);
+  return { ...genPlayer(uiAnimalObj), ai: AI.Player };
 };

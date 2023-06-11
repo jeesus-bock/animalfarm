@@ -1,4 +1,4 @@
-import { Animal } from '../../common';
+import { Animal, UiAnimal } from '../../common';
 import { ECSService } from './ecs-service';
 import { LogService } from './log-service';
 
@@ -11,7 +11,7 @@ export class AnimalService {
     return this.instance;
   }
   constructor() {}
-  public addAnimal(animal: Animal) {
+  public addAnimal(animal: UiAnimal) {
     LogService.getInstance().addLogItem('[AnimalService] addAnimal', animal);
     ECSService.getInstance().addAnimal(animal);
   }
