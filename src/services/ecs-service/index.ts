@@ -79,10 +79,11 @@ export class ECSService {
       // Could be icons too with some effort.
       uiObj: this.world.with('id', 'position', 'ui', 'map'),
       selectedUiObj: this.world.with('id', 'position', 'ui', 'map', 'selected'),
+      selectedUiAnimal: this.world.with('id', 'name', 'ai', 'stats', 'health', 'position', 'ui', 'map', 'selected'),
       player: this.world.with('id', 'position', 'ui', 'map', 'stats', 'isPlayer'),
 
       // Moving. Entities that can move.
-      moving: this.world.with('position', 'velocity', 'map', 'isPlayer'),
+      moving: this.world.with('position', 'velocity', 'map'),
       // Entities with AI, they make use of velocity and position components too.
       ai: this.world.with('velocity', 'ai', 'position', 'map'),
       // The map entities. Right now there's support for multiple maps of different sizes.

@@ -1,5 +1,5 @@
 import { ECSService } from '.';
-import { Map, Player, UiObj } from '../../../common';
+import { Map, Player, UiAnimal, UiObj } from '../../../common';
 
 // Gets the uiObj ui entry at given coordinates or null if square is empty.
 export const getUiEntAt = (x: number, y: number, map: string): UiObj | null => {
@@ -53,6 +53,15 @@ export const getSelectedUiObj = (): UiObj | null => {
   }
   return null;
 };
+export const getSelectedUiAnimal = (): UiAnimal | null => {
+  const { Arch } = ECSService.getInstance();
+
+  for (const ent of Arch.selectedUiAnimal) {
+    return ent;
+  }
+  return null;
+};
+
 // Get the selected UiObj or null if none selected.
 export const getPlayer = (): Player | null => {
   const { Arch } = ECSService.getInstance();

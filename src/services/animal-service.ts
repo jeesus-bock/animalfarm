@@ -1,5 +1,6 @@
-import { Animal, UiAnimal } from '../../common';
+import { Animal, GenUiAnimal, UiAnimal } from '../../common';
 import { ECSService } from './ecs-service';
+import { getSelectedMap } from './ecs-service/helpers';
 import { LogService } from './log-service';
 
 export class AnimalService {
@@ -14,5 +15,12 @@ export class AnimalService {
   public addAnimal(animal: UiAnimal) {
     LogService.getInstance().addLogItem('[AnimalService] addAnimal', animal);
     ECSService.getInstance().addAnimal(animal);
+  }
+  public GenerateAnimal() {
+    const selectedMap = getSelectedMap();
+    if (!selectedMap) return;
+    const { dimensions, id } = selectedMap;
+    const obj = GenUiAnimal(dimensions.x, dimensions.y, id);
+    this.addAnimal(obj);
   }
 }

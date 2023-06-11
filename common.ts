@@ -205,7 +205,7 @@ const genPlayer = (base: UiAnimal): Player => {
 
 export const GenUiAnimal = (mapWidth: number, mapHeight: number, mapId: string): UiAnimal => {
   const uiObj = genUiObj(mapWidth, mapHeight, mapId);
-  return genUiAnimal(uiObj);
+  return { ...genUiAnimal(uiObj), velocity: { x: 0, y: 0 } };
 };
 export const GenPlayer = (mapWidth: number, mapHeight: number, mapId: string): Player => {
   const uiObj = genUiObj(mapWidth, mapHeight, mapId);

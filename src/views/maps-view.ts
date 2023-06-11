@@ -10,6 +10,7 @@ import { Map } from '../../common';
 import { LogService } from '../services/log-service';
 import { PlayerService } from '../services/player-service';
 import { ECSService } from '../services/ecs-service';
+import { AnimalService } from '../services/animal-service';
 const { div, select, option, label, button, input } = van.tags;
 let editedMap: Map | null = null;
 export const MapsView = (mapDiv: HTMLDivElement) => {
@@ -49,8 +50,18 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
             UiService.getInstance().refresh();
           },
         },
+        'Request player'
+      ),
+      button(
+        {
+          onclick: () => {
+            AnimalService.getInstance().GenerateAnimal();
+            UiService.getInstance().refresh();
+          },
+        },
         'Request animal'
       ),
+
       label('Name:'),
       input({
         value: editedMap && editedMap.name ? editedMap.name : 'not selected',
