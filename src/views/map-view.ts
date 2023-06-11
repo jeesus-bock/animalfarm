@@ -1,9 +1,9 @@
 // View with the map
 import van from '../van-0.11.10.min';
 
-import { TopNav } from '../components/top-nav';
+import { TopNav } from './components/top-nav';
 import { LogService } from '../services/log-service';
-import { SelectedObj } from '../components/seleted-obj';
+import { SelectedObj } from './components/seleted-obj';
 const { div } = van.tags;
 
 export const MapView = (mapDiv: HTMLDivElement) => {

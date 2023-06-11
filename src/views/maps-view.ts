@@ -1,15 +1,15 @@
 // View about the different maps which we do not yet have.
 import van from '../van-0.11.10.min';
 
-import { TopNav } from '../components/top-nav';
+import { TopNav } from './components/top-nav';
 
-import { Arch, getAllMaps } from '../ecs';
-import { getSelectedMap, selectMapEntity } from '../ecs/helpers';
+import { getSelectedMap } from '../services/ecs-service/helpers';
 import { MapService } from '../services/map-service';
 import { UiService } from '../services/ui-service';
 import { Map } from '../../common';
 import { LogService } from '../services/log-service';
 import { PlayerService } from '../services/player-service';
+import { ECSService } from '../services/ecs-service';
 const { div, select, option, label, button, input } = van.tags;
 let editedMap: Map | null = null;
 export const MapsView = (mapDiv: HTMLDivElement) => {
@@ -26,7 +26,11 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
           },
           value: editedMap?.id || '',
         },
-        [getAllMaps().map((m) => option({ value: m.id || '' }, m.name || ''))]
+        [
+          ECSService.getInstance()
+            .getAllMaps()
+            .map((m) => option({ value: m.id || '' }, m.name || '')),
+        ]
       ),
       button(
         {
@@ -66,7 +70,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
         'Refresh'
       ),
     ]),
-    div(JSON.stringify(Arch.player.entities)),
+    div(JSON.stringify(ECSService.getInstance().Arch.player.entities)),
     div({ class: 'map-container' }, mapDiv),
   ]);
 };
@@ -78,5 +82,5 @@ const saveMap = () => {
 };
 // Call the ECS to select a map with the given id.
 const selectMap = (id: string) => {
-  selectMapEntity(id);
+  ECSService.getInstance().selectMapEntity(id);
 };

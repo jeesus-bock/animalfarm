@@ -1,9 +1,9 @@
 import { Animal, EventTypes, Map } from '../../common';
 import { EventBus } from '../event-bus';
+import { AnimalService } from './animal-service';
+import { ECSService } from './ecs-service';
 import { LogService } from './log-service';
 import { SocketService } from './socket-service';
-import { setMaps, addAnimal } from '../ecs';
-
 export class MapService {
   private static instance?: MapService = undefined;
   public static getInstance(): MapService {
@@ -26,11 +26,11 @@ export class MapService {
   };
   public setMaps = (maps: Array<Map>) => {
     LogService.getInstance().addLogItem('[MapService] setting maps');
-    setMaps(maps);
+    ECSService.getInstance().setMaps(maps);
   };
   public addAnimal = (animal: Animal) => {
     LogService.getInstance().addLogItem('[MapService] adding animal', animal);
-    addAnimal(animal);
+    AnimalService.getInstance().addAnimal(animal);
   };
   public saveMap = (map: Map) => {
     if (map.id) {

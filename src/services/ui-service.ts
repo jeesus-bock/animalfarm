@@ -14,8 +14,6 @@ import { EventTypes } from '../../common';
 import { SocketService } from '../services/socket-service';
 import { LogService } from './log-service';
 import { UserService } from './user-service';
-import { MapService } from './map-service';
-import { uiSystem } from '../ecs/systems/ui-system';
 
 const { div } = van.tags;
 const dd = new DiffDOM();

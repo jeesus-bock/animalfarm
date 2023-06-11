@@ -1,6 +1,8 @@
-import { getSelectedUiObj } from '../ecs/helpers';
-import van from '../van-0.11.10.min';
+import van from '../../van-0.11.10.min';
+import { getSelectedUiObj } from '../../services/ecs-service/helpers';
+
 const { div, span, label } = van.tags;
+
 export const SelectedObj = () => {
   const uiObj = getSelectedUiObj();
   if (!uiObj) return div('no seletion');

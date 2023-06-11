@@ -1,10 +1,10 @@
-import van from '../../van-0.11.10.min';
-import { getMapDimensions, getSelectedMap, getSelectedUiObj, getUiEntAt, selectUiObjEntity } from '../helpers';
-import { EventTypes, UiObj } from '../../../common';
-import { EventBus } from '../../event-bus';
-import { UiService } from '../../services/ui-service';
-import { View } from '../../views/types';
-import { LogService } from '../../services/log-service';
+import van from '../../../van-0.11.10.min';
+import { getMapDimensions, getSelectedMap, getSelectedUiObj, getUiEntAt } from '../helpers';
+import { EventTypes, UiObj } from '../../../../common';
+import { EventBus } from '../../../event-bus';
+import { UiService } from '../../../services/ui-service';
+import { LogService } from '../../../services/log-service';
+import { ECSService } from '..';
 
 const { div } = van.tags;
 
@@ -49,7 +49,7 @@ export const uiSystem = () => {
               // Add the selected component to entity that was clicked,
               // while removing it from the rest.
 
-              selectUiObjEntity(ent.id);
+              ECSService.getInstance().selectUiObjEntity(ent.id);
               UiService.getInstance().refresh('square onclick');
             },
           },

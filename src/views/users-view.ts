@@ -2,7 +2,7 @@
 import van from '../van-0.11.10.min';
 import { format } from 'date-fns';
 
-import { TopNav } from '../components/top-nav';
+import { TopNav } from './components/top-nav';
 import { User } from '../../common';
 import { SocketService } from '../services/socket-service';
 import { UserService } from '../services/user-service';

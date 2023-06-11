@@ -1,10 +1,10 @@
-import van from '../van-0.11.10.min';
+import van from '../../van-0.11.10.min';
 
-import { View } from '../views/types';
-import { ECSListen } from '../ecs';
-import { UiService } from '../services/ui-service';
-import { StorageService } from '../services/storage-service';
-import { UserService } from '../services/user-service';
+import { View } from '../types';
+import { UiService } from '../../services/ui-service';
+import { StorageService } from '../../services/storage-service';
+import { UserService } from '../../services/user-service';
+import { ECSService } from '../../services/ecs-service';
 const { nav, ul, li, span } = van.tags;
 
 const items = [
@@ -43,7 +43,7 @@ export const TopNav = () => {
       {
         class: 'pause-tag',
         onclick: () => {
-          ECSListen(!ECSListenOn.val);
+          ECSService.getInstance().ECSListen(!ECSListenOn.val);
           ECSListenOn.val = !ECSListenOn.val;
           UiService.getInstance().refresh();
         },

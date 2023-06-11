@@ -1,13 +1,13 @@
-import { Arch } from '..';
-import { AI } from '../../../common';
-import { LogService } from '../../services/log-service';
+import { AI } from '../../../../common';
+import { LogService } from '../../log-service';
 import { getMapDimensions } from '../helpers';
+import { ECSService } from '..';
 
 // This system has a whole lot of potential for implementing something cool.
 export const aiSystem = () => {
-  LogService.getInstance().addLogItem('[ECS] aiSystem: ' + Arch.ai.entities.length + ' entities.');
+  LogService.getInstance().addLogItem('[ECS] aiSystem: ' + ECSService.getInstance().Arch.ai.entities.length + ' entities.');
 
-  for (const { velocity, position, ai, map } of Arch.ai) {
+  for (const { velocity, position, ai, map } of ECSService.getInstance().Arch.ai) {
     const [width, height] = getMapDimensions(map);
 
     // The only AI with implementation changes velocities of entities.

@@ -2,7 +2,7 @@
 import van from '../van-0.11.10.min';
 import { format } from 'date-fns';
 
-import { TopNav } from '../components/top-nav';
+import { TopNav } from './components/top-nav';
 import { LogItem } from '../../common';
 import { LogService } from '../services/log-service';
 const { div, ul, li, span, h1 } = van.tags;
