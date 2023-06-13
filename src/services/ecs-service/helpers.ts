@@ -1,50 +1,49 @@
 import { ECSService } from '.';
-import { Map, Player, UiAnimal, UiObj } from '../../../common';
+import { Level, Player, UiAnimal, UiObj } from '../../../common';
 import { LogService } from '../log-service';
 
 // Gets the uiObj ui entry at given coordinates or null if square is empty.
-export const getUiEntAt = (x: number, y: number, map: string): UiObj | null => {
+export const getUiEntAt = (x: number, y: number, level: string): UiObj | null => {
   const { Arch } = ECSService.getInstance();
-
   for (const ent of Arch.uiObj) {
-    if (ent.position.x == x && ent.position.y == y && ent.map == map) {
+    if (ent.position.x == x && ent.position.y == y && ent.level == level) {
       LogService.getInstance().addLogItem('[ECS] getUiEntAt returns', ent);
       return ent;
     }
   }
   return null;
 };
-export const getGroundAt = (x: number, y: number, mapId: string) => {
-  const map = getMap(mapId);
-  if (!map) return 0;
-  return map.matrix[y][x];
+export const getGroundAt = (x: number, y: number, levelId: string) => {
+  const level = getLevel(levelId);
+  if (!level) return 0;
+  return level.matrix[y][x];
 };
 
-// Helper to get the width and height of current map as a tuple.
-export const getMapDimensions = (mapId: string): [number, number] => {
+// Helper to get the width and height of current level as a tuple.
+export const getLevelDimensions = (levelId: string): [number, number] => {
   const { Arch } = ECSService.getInstance();
 
   // Probably unnecessary check.
-  for (const { dimensions, id } of Arch.maps) {
-    if (id == mapId) return [dimensions.x, dimensions.y];
+  for (const { dimensions, id } of Arch.levels) {
+    if (id == levelId) return [dimensions.x, dimensions.y];
   }
-  throw new Error('getMapDimensions: No map found for id ' + mapId);
+  throw new Error('getLevelDimensions: No level found for id ' + levelId);
 };
 
-// This somewhat brutally casts an any to Map
-export const getSelectedMap = (): Map | null => {
+// This somewhat brutally casts an any to Level
+export const getSelectedLevel = (): Level | null => {
   const { Arch } = ECSService.getInstance();
 
-  for (const ent of Arch.selectedMap) {
+  for (const ent of Arch.selectedLevel) {
     return ent;
   }
   return null;
 };
-export const getMap = (mapId: string): Map | null => {
+export const getLevel = (levelId: string): Level | null => {
   const { Arch } = ECSService.getInstance();
 
-  for (const ent of Arch.maps) {
-    if (ent.id == mapId) return ent;
+  for (const ent of Arch.levels) {
+    if (ent.id == levelId) return ent;
   }
   return null;
 };

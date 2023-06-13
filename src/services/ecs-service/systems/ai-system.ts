@@ -1,14 +1,14 @@
 import { AI } from '../../../../common';
 import { LogService } from '../../log-service';
-import { getMapDimensions } from '../helpers';
+import { getLevelDimensions } from '../helpers';
 import { ECSService } from '..';
 
 // This system has a whole lot of potential for implementing something cool.
 export const aiSystem = () => {
   LogService.getInstance().addLogItem('[ECS] aiSystem: ' + ECSService.getInstance().Arch.ai.entities.length + ' entities.');
 
-  for (const { velocity, position, ai, map } of ECSService.getInstance().Arch.ai) {
-    const [width, height] = getMapDimensions(map);
+  for (const { velocity, position, ai, level } of ECSService.getInstance().Arch.ai) {
+    const [width, height] = getLevelDimensions(level);
 
     // The only AI with implementation changes velocities of entities.
     // Blocks entities from going off grid.

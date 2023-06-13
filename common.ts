@@ -18,21 +18,21 @@ export enum EventTypes {
   // User exits the server
   Exit = 'EXIT',
 
-  MapUpdated = 'MAP_UPDATED',
+  LevelUpdated = 'LEVEL_UPDATED',
   // Request event that server responds to with a list of all the users currently on the server.
   RequestUsers = 'REQUEST_USERS',
-  RequestMaps = 'REQUEST_MAPS',
-  GenerateMap = 'GENERATE_MAP',
+  RequestLevels = 'REQUEST_LEVELS',
+  GenerateLevel = 'GENERATE_LEVEL',
   RequestAnimal = 'REQUEST_ANIMAL',
 
-  // dispatched after a map has been added to ECS
-  MapAdded = 'MAP_ADDED',
+  // dispatched after a level has been added to ECS
+  LevelAdded = 'LEVEL_ADDED',
 
-  // Send map to server to be saved
-  CreateMap = 'CREATE_MAP',
+  // Send level to server to be saved
+  CreateLevel = 'CREATE_LEVEL',
 
-  // Send updated map to server
-  UpdateMap = 'UPDATE_MAP',
+  // Send updated level to server
+  UpdateLevel = 'UPDATE_LEVEL',
 
   // Reply message when user tries to connect with an existing username
   NameInUse = 'NAME_IN_USE',
@@ -55,7 +55,7 @@ export interface LogItem {
   user?: User;
 }
 
-export interface Map {
+export interface Level {
   id: string;
   name: string;
   dimensions: { x: number; y: number };
@@ -89,7 +89,9 @@ export enum Species {
   chicken = '🐓',
   devil = '😈',
   woman = '🚺',
+  man = '🚹',
   bigNose = '👺',
+  panda = '🐼',
 }
 
 export interface Stats {
@@ -106,7 +108,7 @@ export interface Health {
 export interface UiObj {
   id: string;
   position: { x: number; y: number };
-  mapId: string;
+  levelId: string;
   ui: { char: string; color: string };
   selected?: boolean;
   velocity?: XY;
@@ -129,12 +131,12 @@ export interface UiAnimal extends Animal, UiObj {}
 export interface Player extends UiAnimal {
   isPlayer: boolean;
 }
-export interface Map {
+export interface Level {
   id: string;
   name: string;
   selected?: boolean;
   dimensions: XY;
-  isMap?: boolean;
+  isLevel?: boolean;
   matrix: Array<Array<number>>;
 }
 
@@ -157,12 +159,12 @@ export const genMatrix = (width: number, height: number) => {
   }
   return ret;
 };
-export const genMap = (): Map => {
+export const genLevel = (): Level => {
   const width = Math.round(Math.random() * 10 + 20);
   const height = Math.round(Math.random() * 10 + 20);
   return {
     id: '',
-    isMap: true,
+    isLevel: true,
     name: genId(),
     dimensions: { x: width, y: height },
     matrix: genMatrix(width, height),
@@ -199,11 +201,11 @@ const genLightRGB = (): string => {
   return 'rgb(' + r + ',' + g + ',' + b + ')';
 };
 
-const genUiObj = (mapWidth: number, mapHeight: number, mapId: string): UiObj => {
+const genUiObj = (levelWidth: number, levelHeight: number, levelId: string): UiObj => {
   const ret: UiObj = {
     id: genId(),
-    position: { x: Math.round(Math.random() * (mapWidth - 2)) + 1, y: Math.round(Math.random() * (mapHeight - 2)) + 1 },
-    mapId: mapId,
+    position: { x: Math.round(Math.random() * (levelWidth - 2)) + 1, y: Math.round(Math.random() * (levelHeight - 2)) + 1 },
+    levelId: levelId,
     ui: { char: randomGlyph(), color: genLightRGB() },
   };
   return ret;
@@ -217,12 +219,12 @@ const genPlayer = (base: UiAnimal): Player => {
   return { isPlayer: true, ...base };
 };
 
-export const GenUiAnimal = (mapWidth: number, mapHeight: number, mapId: string): UiAnimal => {
-  const uiObj = genUiObj(mapWidth, mapHeight, mapId);
+export const GenUiAnimal = (levelWidth: number, levelHeight: number, levelId: string): UiAnimal => {
+  const uiObj = genUiObj(levelWidth, levelHeight, levelId);
   return { ...genUiAnimal(uiObj), velocity: { x: 0, y: 0 } };
 };
-export const GenPlayer = (mapWidth: number, mapHeight: number, mapId: string): Player => {
-  const uiObj = genUiObj(mapWidth, mapHeight, mapId);
+export const GenPlayer = (levelWidth: number, levelHeight: number, levelId: string): Player => {
+  const uiObj = genUiObj(levelWidth, levelHeight, levelId);
   const uiAnimalObj = genUiAnimal(uiObj);
   return { ...genPlayer(uiAnimalObj), ai: AI.Player };
 };

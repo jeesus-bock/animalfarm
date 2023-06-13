@@ -1,42 +1,42 @@
 import { Request, Response, Express } from 'express';
-import { MapService } from './service/map-service';
-import { genMap } from '../common';
+import { LevelService } from './service/level-service';
+import { genLevel } from '../common';
 
 export const initRoutes = (app: Express) => {
-  app.get('/maps', async (req: Request, res: Response) => {
-    res.json(await MapService.getInstance().getMaps());
+  app.get('/levels', async (req: Request, res: Response) => {
+    res.json(await LevelService.getInstance().getLevels());
   });
   // For testing purposes for now
-  app.get('/maps/generate', async (req: Request, res: Response) => {
-    console.log('[end-point] /maps/generate');
-    const map = genMap();
-    console.log(JSON.stringify(map));
-    return res.json(map);
+  app.get('/levels/generate', async (req: Request, res: Response) => {
+    console.log('[end-point] /levels/generate');
+    const level = genLevel();
+    console.log(JSON.stringify(level));
+    return res.json(level);
   });
-  app.get('/maps/:id', async (req: Request, res: Response) => {
-    console.log('[end-point] /maps/' + req.params.id);
-    const map = MapService.getInstance().getMap(req.params.id);
-    if (!map) return res.status(404);
-    return res.json(map);
+  app.get('/levels/:id', async (req: Request, res: Response) => {
+    console.log('[end-point] /levels/' + req.params.id);
+    const level = LevelService.getInstance().getLevel(req.params.id);
+    if (!level) return res.status(404);
+    return res.json(level);
   });
-  app.post('/maps', async (req: Request, res: Response) => {
-    console.log('[end-point] /maps POST');
-    const map = MapService.getInstance().getMap(req.params.id);
-    if (!map) return res.status(404);
-    return res.json(map);
+  app.post('/levels', async (req: Request, res: Response) => {
+    console.log('[end-point] /levels POST');
+    const level = LevelService.getInstance().getLevel(req.params.id);
+    if (!level) return res.status(404);
+    return res.json(level);
   });
-  app.put('/maps/:id', async (req: Request, res: Response) => {
-    console.log('[end-point] /maps/' + req.params.id + ' POST');
-    const map = MapService.getInstance().updateMap(req.params.id, req.body);
-    if (!map) return res.status(404);
-    return res.json(map);
+  app.put('/levels/:id', async (req: Request, res: Response) => {
+    console.log('[end-point] /levels/' + req.params.id + ' POST');
+    const level = LevelService.getInstance().updateLevel(req.params.id, req.body);
+    if (!level) return res.status(404);
+    return res.json(level);
   });
 };
 
 // WIP func to list all endpoints. Might later on be used in server<->server communication.
 const getRoutes = (app: Express) => {
   console.log(
-    app._router.stack.map((l: any) => {
+    app._router.stack.level((l: any) => {
       if (!l || !l.route) return '';
       return l.route.path + ' ' + Object.keys(l.route.methods);
     })

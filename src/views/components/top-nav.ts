@@ -4,18 +4,15 @@ import { View } from '../types';
 import { UiService } from '../../services/ui-service';
 import { StorageService } from '../../services/storage-service';
 import { UserService } from '../../services/user-service';
-import { ECSService } from '../../services/ecs-service';
 const { nav, ul, li, span } = van.tags;
 
 const items = [
-  { label: 'Map', view: View.Map },
+  { label: 'Level', view: View.Level },
   { label: 'Animals', view: View.Animals },
-  { label: 'Maps', view: View.Maps },
+  { label: 'Levels', view: View.Levels },
   { label: 'Users', view: View.Users },
   { label: 'Logs', view: View.Logs },
 ];
-
-const ECSListenOn = van.state(true);
 
 // Top navigation bar.
 export const TopNav = () => {
@@ -38,17 +35,6 @@ export const TopNav = () => {
           item.label
         )
       )
-    ),
-    span(
-      {
-        class: 'pause-tag',
-        onclick: () => {
-          ECSService.getInstance().ECSListen(!ECSListenOn.val);
-          ECSListenOn.val = !ECSListenOn.val;
-          UiService.getInstance().refresh();
-        },
-      },
-      ECSListenOn.val ? 'Pause' : 'Unpause'
     ),
     span(
       {

@@ -1,14 +1,14 @@
-import { Map } from '../common';
-import { DBMap } from './entity/map.entity';
+import { Level } from '../common';
+import { DBLevel } from './entity/level.entity';
 
-export const mapToDBMap = (map: Map) => {
-  const dbMap: DBMap = { id: map.id, name: map.name, width: map.dimensions.x, height: map.dimensions.y, matrix: matrixToString(map.matrix) };
-  return dbMap;
+export const levelToDBLevel = (level: Level) => {
+  const dbLevel: DBLevel = { id: level.id, name: level.name, width: level.dimensions.x, height: level.dimensions.y, matrix: matrixToString(level.matrix) };
+  return dbLevel;
 };
 
-export const dbmapToMap = (dbmap: DBMap) => {
-  const map: Map = { id: dbmap.id, isMap: true, name: dbmap.name, dimensions: { x: dbmap.width, y: dbmap.height }, matrix: stringToMatrix(dbmap.matrix) };
-  return map;
+export const dblevelToLevel = (dblevel: DBLevel) => {
+  const level: Level = { id: dblevel.id, isLevel: true, name: dblevel.name, dimensions: { x: dblevel.width, y: dblevel.height }, matrix: stringToMatrix(dblevel.matrix) };
+  return level;
 };
 const matrixToString = (matrix: number[][]): string => {
   let ret = '';

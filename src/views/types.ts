@@ -1,8 +1,8 @@
 export enum View {
   Login = '/',
-  Map = '/map',
+  Level = '/level',
   Animals = '/animals',
-  Maps = '/maps',
+  Levels = '/levels',
   Users = '/users',
   Logs = '/logs',
 }

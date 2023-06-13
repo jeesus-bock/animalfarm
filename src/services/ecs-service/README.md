@@ -4,7 +4,7 @@ Entity Component System, see more on miniplex' page at https://github.com/hmans/
 
 Consists of:
 
-- Entities, basically everything. At the moment we got the map and animals but this ought to be taken further
+- Entities, basically everything. At the moment we got the level and animals but this ought to be taken further
   - We already have stats, it'll get interesting when we get the animals to fight each other. This would
     warrant the creation of maybe attacking and damage components for example.
 - Components, ie. entity properties. for example position which is x,y coordinates or the ui property that
@@ -15,7 +15,7 @@ Consists of:
 - Systems, funtions that handle the entities ie. all the logic.
 
 The ECS is dependant on the Event Bus, running the systems (logic and updates) on Tick-events. It also requires
-tag functions from VanJS for generating the map element.
+tag functions from VanJS for generating the level element.
 
 ### Thoughts
 

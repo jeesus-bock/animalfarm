@@ -6,9 +6,9 @@ import { EventBus } from '../../event-bus';
 import { aiSystem } from './systems/ai-system';
 import { moveSystem } from './systems/move-system';
 import { uiSystem } from './systems/ui-system';
-import { EventTypes, AI, Map, Animal, GenUiAnimal, Player } from '../../../common';
+import { EventTypes, AI, Level, Animal, GenUiAnimal, Player } from '../../../common';
 import { LogService } from '../log-service';
-import { getSelectedMap } from './helpers';
+import { getSelectedLevel } from './helpers';
 
 // The ECS entity with components as props.
 // All are optional because the entities have just a subset of the
@@ -18,8 +18,8 @@ export interface Entity {
   // This could possibly be required value?
   id?: string;
 
-  // The map the entity is on
-  map?: string;
+  // The level the entity is on
+  level?: string;
   // and the position on it.
   position?: { x: number; y: number };
   stats?: { att: number; def: number };
@@ -28,21 +28,21 @@ export interface Entity {
   ui?: { char: string; color: string };
   // Entities that are selected have this component.
   // At the moment it refers to selected UI entities.
-  // For the maps this works okay, but when drawing uiobjs on the
-  // map it feels wrong the selected uiobj isn't there.
+  // For the levels this works okay, but when drawing uiobjs on the
+  // level it feels wrong the selected uiobj isn't there.
   selected?: boolean;
   velocity?: { x: number; y: number };
-  // This is the width and height of the entity (map, but possibly has uses for for example area-of-effect type of stuff)
+  // This is the width and height of the entity (level, but possibly has uses for for example area-of-effect type of stuff)
   dimensions?: { x: number; y: number };
-  // For now the map layout consists of 2d array of numbers.
+  // For now the level layout consists of 2d array of numbers.
   matrix?: Array<Array<number>>;
   // Instead of type-component and filtering, we can use boolean component to narrow down the archetype entities, entities that
-  // are a map in this particular case.
+  // are a level in this particular case.
   // Not sure if this is the best way to do this.
-  isMap?: boolean;
+  isLevel?: boolean;
   isPlayer?: boolean;
   isAnimal?: boolean;
-  // Name and description of animal/map
+  // Name and description of animal/level
   name?: string;
   description?: string;
   // The AI enum value, switched or iffed in the system.
@@ -66,7 +66,7 @@ export class ECSService {
   // Systems are just functions that do stuff to and with the entities
   // The order is important: first the ai does it's magic
   // Then we move the object accordingly,
-  // and last we render the map with the objects on top.
+  // and last we render the level with the objects on top.
   private systems = [aiSystem, moveSystem, uiSystem];
 
   // Counts ticks
@@ -77,20 +77,21 @@ export class ECSService {
     this.Arch = {
       // UiObj ui entities, ie a letter or other utf glyph with color.
       // Could be icons too with some effort.
-      uiObj: this.world.with('id', 'position', 'ui', 'map'),
-      selectedUiObj: this.world.with('id', 'position', 'ui', 'map', 'selected'),
-      selectedUiAnimal: this.world.with('id', 'name', 'ai', 'stats', 'health', 'position', 'ui', 'map', 'selected'),
-      player: this.world.with('id', 'position', 'ui', 'map', 'stats', 'isPlayer'),
+      uiObj: this.world.with('id', 'position', 'ui', 'level'),
+      selectedUiObj: this.world.with('id', 'position', 'ui', 'level', 'selected'),
+      selectedUiAnimal: this.world.with('id', 'name', 'ai', 'stats', 'health', 'position', 'ui', 'level', 'selected'),
+      player: this.world.with('id', 'position', 'ui', 'level', 'stats', 'isPlayer'),
 
       // Moving. Entities that can move.
-      moving: this.world.with('position', 'velocity', 'map'),
+      moving: this.world.with('position', 'velocity', 'level'),
       // Entities with AI, they make use of velocity and position components too.
-      ai: this.world.with('velocity', 'ai', 'position', 'map'),
-      // The map entities. Right now there's support for multiple maps of different sizes.
-      maps: this.world.with('dimensions', 'isMap', 'name', 'id', 'matrix'),
-      // Map currently selected, ie. visible.
-      selectedMap: this.world.with('id', 'isMap', 'name', 'selected', 'dimensions', 'matrix'),
+      ai: this.world.with('velocity', 'ai', 'position', 'level'),
+      // The level entities. Right now there's support for multiple levels of different sizes.
+      levels: this.world.with('dimensions', 'isLevel', 'name', 'id', 'matrix'),
+      // Level currently selected, ie. visible.
+      selectedLevel: this.world.with('id', 'isLevel', 'name', 'selected', 'dimensions', 'matrix'),
     };
+    EventBus.getInstance().register(EventTypes.GenerateLevel, this.levelAdded);
   }
 
   // Has to be publicly available to run ticks on user input.ccccc
@@ -107,109 +108,105 @@ export class ECSService {
     }
   };
 
-  // This is needed in the ui for now for testing changing of the maps.
-  public getAllMaps = (): Array<Map> => {
-    const maps = this.Arch.maps.entities;
-    LogService.getInstance().addLogItem('[ECS] getAllMaps returning ' + maps.length + ' maps.');
-    return maps;
+  // This is needed in the ui for now for testing changing of the levels.
+  public getAllLevels = (): Array<Level> => {
+    const levels = this.Arch.levels.entities;
+    LogService.getInstance().addLogItem('[ECS] getAllLevels returning ' + levels.length + ' levels.');
+    return levels;
   };
-  public addMap = (map: Map) => {
-    if (!this.world) throw new Error('ECSServive addMap world undefined');
-    this.world.add(map);
-    const maps = this.getAllMaps();
-    if (maps.length == 1) ECSService.getInstance().selectMapEntity(map.id);
-    EventBus.getInstance().dispatch(EventTypes.MapAdded);
+  public addLevel = (level: Level) => {
+    if (!this.world) throw new Error('ECSServive addLevel world undefined');
+    this.world.add(level);
+    const levels = this.getAllLevels();
+    if (levels.length == 1) ECSService.getInstance().selectLevelEntity(level.id);
+    EventBus.getInstance().dispatch(EventTypes.LevelAdded);
   };
   public addAnimal = (animal: Animal) => {
     if (!this.world) throw new Error('ECSServive addAnimal world undefined');
-    const selectedMap = getSelectedMap();
+    const selectedLevel = getSelectedLevel();
     this.world.add(animal);
-    if (selectedMap) {
+    if (selectedLevel) {
       this.world.addComponent(animal, 'position', { x: 2, y: 2 });
-      this.world.addComponent(animal, 'map', selectedMap.id);
+      this.world.addComponent(animal, 'level', selectedLevel.id);
     }
-    EventBus.getInstance().dispatch(EventTypes.MapAdded);
+    uiSystem();
+    EventBus.getInstance().dispatch(EventTypes.LevelAdded);
   };
   public setPlayer = (player: Player) => {
     if (!this.world) throw new Error('ECSServive setPlayer world undefined');
-    const selectedMap = getSelectedMap();
+    const selectedLevel = getSelectedLevel();
     this.world.add(player);
 
-    // Guard against situation where maps haven't been loaded
-    if (selectedMap) {
+    // Guard against situation where levels haven't been loaded
+    if (selectedLevel) {
       this.world.addComponent(player, 'position', { x: 2, y: 2 });
-      this.world.addComponent(player, 'map', selectedMap.id);
+      this.world.addComponent(player, 'level', selectedLevel.id);
     }
+    uiSystem();
   };
   public addComponent(entity: Entity, component: string, value: any) {
     if (!this.world) throw new Error('ECSService addComponent world undefined');
     this.world?.addComponent(entity, component as any, value);
   }
-  private unregisterTick: (() => void) | null = null;
-  public ECSListen = (on: boolean) => {
-    // Run systems on event bus 'tick' events.
-    // These events come from the server.
-    // Use ECSListen(false) to turn it off.
-    if (on) {
-      const { unregister } = EventBus.getInstance().register(EventTypes.Tick, this.runSystems);
-      this.unregisterTick = unregister;
-    }
-    if (!on && this.unregisterTick) {
-      this.unregisterTick();
-      this.unregisterTick = null;
-    }
-    LogService.getInstance().addLogItem('[ECS] listen to Tick is ' + (on ? 'ON' : 'OFF') + '.');
-  };
 
-  private mapAdded = (map: Map) => {
-    if (!this.world) throw new Error('ECSServive mapAdded world undefined');
-    for (const ent of this.Arch.maps) {
-      if (!ent.id || ent.id == map.id) {
-        this.world.remove(ent);
-        map.selected = true;
-        map.isMap = true;
-        this.world.add(map);
-        for (let i = 0; i < 5; i++) this.world.add(GenUiAnimal(map.dimensions.x, map.dimensions.y, map.id));
-        return;
+  private levelAdded = (level: Level) => {
+    if (!this.world) throw new Error('ECSServive levelAdded world undefined');
+    LogService.getInstance().addLogItem('[ECS] level added', level);
+    if (this.Arch.levels.entities.length > 0) {
+      for (const ent of this.Arch.levels) {
+        if (!ent.id || ent.id == level.id) {
+          this.world.remove(ent);
+          level.selected = true;
+          level.isLevel = true;
+          this.world.add(level);
+          this.selectLevelEntity(level.id);
+          for (let i = 0; i < 5; i++) this.world.add(GenUiAnimal(level.dimensions.x, level.dimensions.y, level.id));
+          return;
+        }
       }
     }
+    level.selected = true;
+    level.isLevel = true;
+    this.world.add(level);
+    this.selectLevelEntity(level.id);
+    LogService.getInstance().addLogItem('[ECS] selectLevelEntity', level);
   };
 
-  // Sets all the maps in the ECS.
-  // Done by first removing all the maps and then adding
-  // the maps passed as parameter.
-  public setMaps = (maps: Array<Map>) => {
-    if (!this.world) throw new Error('ECSServive setMaps world undefined');
-    for (const ent of this.Arch.maps) {
+  // Sets all the levels in the ECS.
+  // Done by first removing all the levels and then adding
+  // the levels passed as parameter.
+  public setLevels = (levels: Array<Level>) => {
+    if (!this.world) throw new Error('ECSServive setLevels world undefined');
+    for (const ent of this.Arch.levels) {
       this.world.remove(ent);
     }
-    for (const map of maps) {
-      this.world.add(map);
+    for (const level of levels) {
+      this.world.add(level);
     }
   };
-  // Helper to switch the selected component from map entity to another. If no
-  // map entity is found to be selected it throws.
-  public selectMapEntity = (id: string): void => {
-    if (!this.world) throw new Error('ECSServive selectMapEntity world undefined');
+  // Helper to switch the selected component from level entity to another. If no
+  // level entity is found to be selected it throws.
+  public selectLevelEntity = (id: string): void => {
+    if (!this.world) throw new Error('ECSServive selectLevelEntity world undefined');
 
-    LogService.getInstance().addLogItem('[ECS] selecting map entity ' + id);
+    LogService.getInstance().addLogItem('[ECS] selecting level entity ' + id);
     let selected = false;
-    // Loop thru all the maps.
-    for (const ent of this.Arch.maps) {
+    // Loop thru all the levels.
+    for (const ent of this.Arch.levels) {
       if (ent.id == id) {
-        // Add the selected component to the chosen map.
+        // Add the selected component to the chosen level.
         this.world.addComponent(ent, 'selected', true);
-        LogService.getInstance().addLogItem('[ECS] selected map entity ' + id);
+        LogService.getInstance().addLogItem('[ECS] selected level entity ' + id);
 
         selected = true;
       } else {
         // And remove the selected component from the rest of them
         this.world.removeComponent(ent, 'selected');
       }
-      // Run uiSystem immediately to refresh the App.mapDiv object.
+      // Run uiSystem immediately to refresh the App.levelDiv object.
       uiSystem();
     }
-    if (!selected) throw new Error('Failed to select map with the id ' + id);
+    if (!selected) throw new Error('Failed to select level with the id ' + id);
   };
 
   // Selects a uiObj entity and deselects others.
@@ -222,7 +219,7 @@ export class ECSService {
     // the entity object.
     for (const ent of this.Arch.uiObj) {
       if (id && ent.id == id) {
-        // Add the selected component to the chosen map.
+        // Add the selected component to the chosen level.
         this.world.addComponent(ent, 'selected', true);
         LogService.getInstance().addLogItem('[ECS] select UiObj entity', ent);
       } else {

@@ -1,12 +1,12 @@
 import { io, Socket } from 'socket.io-client';
 
-import { EventTypes, User, Map, Animal } from '../../common';
+import { EventTypes, User, Level, Animal } from '../../common';
 import { EventBus } from '../event-bus';
 import { View } from '../views/types';
 import { UiService } from './ui-service';
 import { LogService } from './log-service';
 import { UserService } from './user-service';
-import { MapService } from './map-service';
+import { LevelService } from './level-service';
 
 export class SocketService {
   private static instance?: SocketService = undefined;
@@ -34,7 +34,7 @@ export class SocketService {
       const userObj = { id: this.socket?.id || '', connected: Date.now(), name: userName };
       addLogItem('[Socket] Connected to server', userObj);
       UserService.getInstance().setUser(userObj);
-      MapService.getInstance().requestMaps();
+      LevelService.getInstance().requestLevels();
     });
     this.socket.on(EventTypes.Enter, (user: User) => {
       LogService.getInstance().addLogItem('[Socket] Received Enter event', user);
@@ -48,17 +48,21 @@ export class SocketService {
       UserService.getInstance().setUsers(users);
       if (window.location.pathname == View.Users) UiService.getInstance().refresh();
     });
-    this.socket.on(EventTypes.RequestMaps, (maps: Array<Map>) => {
-      addLogItem('[Socket] Received RequestMap reply', maps);
-      EventBus.getInstance().dispatch(EventTypes.RequestMaps, maps);
+    this.socket.on(EventTypes.RequestLevels, (levels: Array<Level>) => {
+      addLogItem('[Socket] Received RequestLevel reply', levels);
+      EventBus.getInstance().dispatch(EventTypes.RequestLevels, levels);
     });
-    this.socket.on(EventTypes.CreateMap, (map: Map) => {
-      addLogItem('[Socket] Received CreateMap reply', { ...map, matrix: [] });
-      EventBus.getInstance().dispatch(EventTypes.CreateMap, map);
+    this.socket.on(EventTypes.GenerateLevel, (level: Level) => {
+      addLogItem('[Socket] Received GenerateLevel reply', level);
+      EventBus.getInstance().dispatch(EventTypes.GenerateLevel, level);
     });
-    this.socket.on(EventTypes.UpdateMap, (map: Map) => {
-      addLogItem('[Socket] Received UpdateMap reply', { ...map, matrix: [] });
-      EventBus.getInstance().dispatch(EventTypes.UpdateMap, map);
+    this.socket.on(EventTypes.CreateLevel, (level: Level) => {
+      addLogItem('[Socket] Received CreateLevel reply', { ...level, matrix: [] });
+      EventBus.getInstance().dispatch(EventTypes.CreateLevel, level);
+    });
+    this.socket.on(EventTypes.UpdateLevel, (level: Level) => {
+      addLogItem('[Socket] Received UpdateLevel reply', { ...level, matrix: [] });
+      EventBus.getInstance().dispatch(EventTypes.UpdateLevel, level);
     });
     this.socket.on(EventTypes.RequestAnimal, (animal: Animal) => {
       addLogItem('[Socket] Received RequestAnimal reply', animal);
@@ -76,24 +80,29 @@ export class SocketService {
     if (!this.socket) throw new Error('Attempting to requestUsers with undefined socket');
     this.socket.emit(EventTypes.RequestUsers);
   }
-  public requestMaps() {
-    LogService.getInstance().addLogItem('[Socket] sending RequestMaps');
-    if (!this.socket) throw new Error('Attempting to requestMaps with undefined socket');
-    this.socket.emit(EventTypes.RequestMaps);
+  public requestLevels() {
+    LogService.getInstance().addLogItem('[Socket] sending RequestLevels');
+    if (!this.socket) throw new Error('Attempting to requestLevels with undefined socket');
+    this.socket.emit(EventTypes.RequestLevels);
+  }
+  public generateLevel() {
+    LogService.getInstance().addLogItem('[Socket] sending GenerateLEvel');
+    if (!this.socket) throw new Error('Attempting to generateLevel with undefined socket');
+    this.socket.emit(EventTypes.GenerateLevel);
   }
   public requestAnimal() {
     LogService.getInstance().addLogItem('[Socket] sending RequestAnimal');
     if (!this.socket) throw new Error('Attempting to RequestAnimal with undefined socket');
     this.socket.emit(EventTypes.RequestAnimal);
   }
-  public updateMap(map: Map) {
-    LogService.getInstance().addLogItem('[Socket] sending UpdateMap');
-    if (!this.socket) throw new Error('Attempting to UpdateMap with undefined socket');
-    this.socket.emit(EventTypes.UpdateMap, map);
+  public updateLevel(level: Level) {
+    LogService.getInstance().addLogItem('[Socket] sending UpdateLevel');
+    if (!this.socket) throw new Error('Attempting to UpdateLevel with undefined socket');
+    this.socket.emit(EventTypes.UpdateLevel, level);
   }
-  public createMap(map: Map) {
-    LogService.getInstance().addLogItem('[Socket] sending CreateMap');
-    if (!this.socket) throw new Error('Attempting to CreateMap with undefined socket');
-    this.socket.emit(EventTypes.CreateMap, map);
+  public createLevel(level: Level) {
+    LogService.getInstance().addLogItem('[Socket] sending CreateLevel');
+    if (!this.socket) throw new Error('Attempting to CreateLevel with undefined socket');
+    this.socket.emit(EventTypes.CreateLevel, level);
   }
 }

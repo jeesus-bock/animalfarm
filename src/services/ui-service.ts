@@ -3,10 +3,10 @@ import { DiffDOM } from 'diff-dom';
 import { EventBus } from '../event-bus';
 
 import { View } from '../views/types';
-import { MapView } from '../views/map-view';
+import { LevelView } from '../views/level-view';
 import { LoginView } from '../views/login-view';
 import { AnimalsView } from '../views/animals-view';
-import { MapsView } from '../views/maps-view';
+import { LevelsView } from '../views/levels-view';
 import { UsersView } from '../views/users-view';
 import { LogsView } from '../views/logs-view';
 
@@ -14,6 +14,7 @@ import { EventTypes } from '../../common';
 import { SocketService } from '../services/socket-service';
 import { LogService } from './log-service';
 import { UserService } from './user-service';
+import { ECSService } from './ecs-service';
 
 const { div } = van.tags;
 const dd = new DiffDOM();
@@ -26,20 +27,21 @@ export class UiService {
     return this.instance;
   }
   constructor() {
-    EventBus.getInstance().register(EventTypes.MapUpdated, this.setMapDiv);
-    EventBus.getInstance().register(EventTypes.MapAdded, this.refresh);
+    EventBus.getInstance().register(EventTypes.LevelUpdated, this.setLevelDiv);
+    EventBus.getInstance().register(EventTypes.LevelAdded, this.refresh);
   }
   // Decoupling of ECS from the UI required me to have
-  // this extra object with the map drawn by ECS.
-  private mapDiv: HTMLDivElement | null = null;
-  private setMapDiv = (mapDiv: HTMLDivElement) => {
-    if (this.mapDiv) {
-      const diff = dd.diff(this.mapDiv, mapDiv);
+  // this extra object with the level drawn by ECS.
+  // Updated with UppdateLevel bus event.
+  private levelDiv: HTMLDivElement | null = null;
+  private setLevelDiv = (levelDiv: HTMLDivElement) => {
+    if (this.levelDiv) {
+      // DOMDiff library to see if the leveldiv has changed.
+      const diff = dd.diff(this.levelDiv, levelDiv);
       if (diff.length == 0) return;
     }
-    LogService.getInstance().addLogItem('[UiService] Setting mapDiv', mapDiv);
-    this.mapDiv = mapDiv;
-    //if (window.location.pathname == View.Map || window.location.pathname == View.Maps) setMapContainer;
+    LogService.getInstance().addLogItem('[UiService] Setting levelDiv', levelDiv);
+    this.levelDiv = levelDiv;
   };
   // Refresh is just for the UI/routing for now.
   // by is for debug purposes, should these be cleared?
@@ -60,10 +62,10 @@ export class UiService {
     // connectSocket() bails out if the connection is present.
     SocketService.getInstance().connectSocket(userName);
     let view: any = div('Uknown route ' + window.location.pathname);
-    if (window.location.pathname == View.Map) view = MapView(this.mapDiv || div('loading'));
+    if (window.location.pathname == View.Level) view = LevelView(this.levelDiv || div('loading'));
     if (window.location.pathname == View.Animals) view = AnimalsView();
-    if (window.location.pathname == View.Maps) {
-      view = MapsView(this.mapDiv || div('loading'));
+    if (window.location.pathname == View.Levels) {
+      view = LevelsView(this.levelDiv || div('loading'));
     }
     if (window.location.pathname == View.Users) view = UsersView();
     if (window.location.pathname == View.Logs) view = LogsView();

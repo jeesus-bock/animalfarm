@@ -1,21 +1,22 @@
-import { DATA_SERVER_PORT, Map } from '../common';
+import { DATA_SERVER_PORT, Level } from '../common';
 
-export const fetchGenMap = async () => {
-  console.log('fetchGenMap');
-  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/maps/generate');
-  return response.json() as Promise<Map>;
+export const fetchGenLevel = async () => {
+  console.log('fetchGenLevel');
+  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/levels/generate');
+  return response.json() as Promise<Level>;
 };
-export const fetchMaps = async () => {
-  console.log('fetchMaps');
-  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/maps');
-  return response.json() as Promise<Array<Map>>;
+export const fetchLevels = async () => {
+  console.log('fetchLevels');
+  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/levels');
+  console.log(response);
+  return response.json() as Promise<Array<Level>>;
 };
 
-export const postMap = async (map: Map) => {
-  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/maps', {
+export const postLevel = async (level: Level) => {
+  const response = await fetch('http://localhost:' + DATA_SERVER_PORT + '/levels', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(map),
+    body: JSON.stringify(level),
   });
-  return response.json() as Promise<Map>;
+  return response.json() as Promise<Level>;
 };

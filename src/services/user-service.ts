@@ -36,8 +36,8 @@ export class UserService {
   public login = (name: string) => {
     // TODO: this could already call SocketService connector
     UserService.getInstance().setUser({ id: '', connected: 0, name: name });
-    // Push the /map route
-    UiService.getInstance().navigateTo(View.Map);
+    // Push the /level route
+    UiService.getInstance().navigateTo(View.Level);
   };
   public logout = () => {
     StorageService.getInstance().unsetUser();

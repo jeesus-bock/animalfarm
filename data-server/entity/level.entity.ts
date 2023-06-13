@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class DBMap {
+export class DBLevel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

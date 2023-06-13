@@ -1,7 +1,7 @@
 import { AI, EventTypes, GenPlayer } from '../../common';
 import { EventBus } from '../event-bus';
 
-import { getSelectedMap, getPlayer } from './ecs-service/helpers';
+import { getSelectedLevel, getPlayer } from './ecs-service/helpers';
 import { ECSService } from './ecs-service';
 
 export class PlayerService {
@@ -42,9 +42,9 @@ export class PlayerService {
     });
   }
   public GeneratePlayer() {
-    const selectedMap = getSelectedMap();
-    if (!selectedMap) return;
-    const { dimensions, id } = selectedMap;
+    const selectedLevel = getSelectedLevel();
+    if (!selectedLevel) return;
+    const { dimensions, id } = selectedLevel;
     const obj = { ...GenPlayer(dimensions.x, dimensions.y, id), ai: AI.Player };
     ECSService.getInstance().setPlayer(obj);
   }
