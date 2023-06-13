@@ -1,12 +1,16 @@
 import { ECSService } from '.';
 import { Map, Player, UiAnimal, UiObj } from '../../../common';
+import { LogService } from '../log-service';
 
 // Gets the uiObj ui entry at given coordinates or null if square is empty.
 export const getUiEntAt = (x: number, y: number, map: string): UiObj | null => {
   const { Arch } = ECSService.getInstance();
 
   for (const ent of Arch.uiObj) {
-    if (ent.position.x == x && ent.position.y == y && ent.map == map) return ent;
+    if (ent.position.x == x && ent.position.y == y && ent.map == map) {
+      LogService.getInstance().addLogItem('[ECS] getUiEntAt returns', ent);
+      return ent;
+    }
   }
   return null;
 };

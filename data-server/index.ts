@@ -13,6 +13,6 @@ dataSource
   });
 
 app.use(express.json());
-initRoutes(app, dataSource);
+initRoutes(app);
 console.log('Running data server on port ' + DATA_SERVER_PORT);
 app.listen(DATA_SERVER_PORT);

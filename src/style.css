@@ -18,6 +18,21 @@ input {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+button {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  background-color: skyblue;
+  border-radius: 0.125rem;
+  border: 1px solid gray;
+}
+button:hover {
+  background-color: powderblue;
+}
+button:active {
+  background-color: royalblue;
+}
 
 .login-view {
   height: 100%;
@@ -29,6 +44,11 @@ input {
   border: 1px solid gray;
   padding: 4rem;
   background-color: aliceblue;
+  display: flex;
+  flex-direction: column;
+}
+.login-box > button {
+  margin-top: 1rem;
 }
 
 .map-view {

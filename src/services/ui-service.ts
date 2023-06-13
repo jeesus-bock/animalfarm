@@ -39,7 +39,7 @@ export class UiService {
     }
     LogService.getInstance().addLogItem('[UiService] Setting mapDiv', mapDiv);
     this.mapDiv = mapDiv;
-    if (window.location.pathname == View.Map || window.location.pathname == View.Maps) this.refresh('setMapDiv');
+    //if (window.location.pathname == View.Map || window.location.pathname == View.Maps) setMapContainer;
   };
   // Refresh is just for the UI/routing for now.
   // by is for debug purposes, should these be cleared?

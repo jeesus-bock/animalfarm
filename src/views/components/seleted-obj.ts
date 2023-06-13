@@ -7,7 +7,7 @@ export const SelectedObj = () => {
   return div({ class: 'selected-obj' }, [
     div({ class: 'flex' }, [
       div({ class: 'char' }, uiObj?.ui.char || ''),
-      div({ class: 'flex-col' }, [div({ class: 'flex' }, [label('id'), span(uiObj.id)]), span('AI:' + uiObj.ai)]),
+      div({ class: 'flex-col' }, [div({ class: 'flex' }, [label('id'), span(uiObj.id)]), span('AI:' + uiObj.ai), span('Name:' + uiObj.name)]),
     ]),
   ]);
 };

@@ -6,15 +6,21 @@ import { TopNav } from './components/top-nav';
 import { getSelectedMap } from '../services/ecs-service/helpers';
 import { MapService } from '../services/map-service';
 import { UiService } from '../services/ui-service';
-import { Map } from '../../common';
+import { EventTypes, Map } from '../../common';
 import { LogService } from '../services/log-service';
 import { PlayerService } from '../services/player-service';
 import { ECSService } from '../services/ecs-service';
 import { AnimalService } from '../services/animal-service';
+import { EventBus } from '../event-bus';
 const { div, select, option, label, button, input } = van.tags;
 let editedMap: Map | null = null;
+let mapContainer = div();
+const editedId = van.state<string | undefined>('pekka');
+
 export const MapsView = (mapDiv: HTMLDivElement) => {
   editedMap = getSelectedMap();
+  editedId.val = editedMap?.id.toString();
+  mapContainer = div({ class: 'map-container' }, mapDiv);
   return div({ className: 'maps-view' }, [
     TopNav(),
     div([
@@ -25,7 +31,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
           onchange: (e: any) => {
             selectMap(e.target.value);
           },
-          value: editedMap?.id || '',
+          value: editedId.val || 'jaska',
         },
         [
           ECSService.getInstance()
@@ -82,7 +88,7 @@ export const MapsView = (mapDiv: HTMLDivElement) => {
       ),
     ]),
     div(JSON.stringify(ECSService.getInstance().Arch.player.entities)),
-    div({ class: 'map-container' }, mapDiv),
+    mapContainer,
   ]);
 };
 
@@ -95,3 +101,13 @@ const saveMap = () => {
 const selectMap = (id: string) => {
   ECSService.getInstance().selectMapEntity(id);
 };
+
+// setMapContainer empties the mapContainer and adds fresh mapDiv to it.
+const setMapContainer = (mapDiv: HTMLDivElement) => {
+  mapContainer.innerHTML = '';
+  van.add(mapContainer, mapDiv);
+  editedId.val = getSelectedMap()?.id;
+};
+
+// Sort of ugly to run this whenever the module file is loaded.
+EventBus.getInstance().register(EventTypes.MapUpdated, setMapContainer);

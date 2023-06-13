@@ -19,7 +19,7 @@ export const uiSystem = () => {
   const selectedUiObj = getSelectedUiObj();
   const selectedUiObjId = selectedUiObj ? selectedUiObj.id : '';
   const [width, height] = getMapDimensions(curMap.id);
-  if (width == 0 || height == 0) throw new Error('Current map ddimensions zero');
+  if (width == 0 || height == 0) throw new Error('Current map dimensions zero');
   // mapDiv is a flex column element.
   const mapDiv = div({ className: 'map' });
   for (let i = 0; i < height; i++) {

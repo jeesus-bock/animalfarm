@@ -74,20 +74,24 @@ export enum AI {
 }
 
 export enum Species {
-  penguin = 'PENGUIN',
-  rider = 'RIDER',
+  penguin = '🐧',
+  rider = '🏇',
+  monkey = '🙉',
+  bee = '🐝',
+  snake = '🐍',
+  tracktor = '🚜',
+  ghost = '👻',
+  camel = '🐫',
+  goat = '🐐',
+  carouselHorse = '🎠',
+  twins = '👯',
+  pig = '🐷',
+  chicken = '🐓',
+  devil = '😈',
+  woman = '🚺',
+  bigNose = '👺',
 }
-// These data models go on top of entities in the ECS.
-// If typeorm is added it's entity modeling will spice things up further.
 
-export interface UiObj {
-  id: string;
-  position: { x: number; y: number };
-  mapId: string;
-  ui: { char: string; color: string };
-  selected?: boolean;
-  velocity?: Velocity;
-}
 export interface Stats {
   att: number;
   def: number;
@@ -97,7 +101,18 @@ export interface Health {
   maxHp: number;
 }
 
-export interface Velocity {
+// These data models go on top of entities in the ECS.
+// If typeorm is added it's entity modeling will spice things up further.
+export interface UiObj {
+  id: string;
+  position: { x: number; y: number };
+  mapId: string;
+  ui: { char: string; color: string };
+  selected?: boolean;
+  velocity?: XY;
+}
+
+export interface XY {
   x: number;
   y: number;
 }
@@ -106,7 +121,6 @@ export interface Animal {
   name: string;
   stats: Stats;
   health: { hp: number; maxHp: number };
-  species: Species;
   ui: { char: string; color: string };
   ai: AI;
 }
@@ -119,7 +133,7 @@ export interface Map {
   id: string;
   name: string;
   selected?: boolean;
-  dimensions: { x: number; y: number };
+  dimensions: XY;
   isMap?: boolean;
   matrix: Array<Array<number>>;
 }
@@ -196,7 +210,7 @@ const genUiObj = (mapWidth: number, mapHeight: number, mapId: string): UiObj => 
 };
 
 const genUiAnimal = (base: UiObj): UiAnimal => {
-  return { name: genName(), health: genHealth(), stats: genStats(), species: genSpecies(), ai: AI.RndDir, ...base };
+  return { name: genName(), health: genHealth(), stats: genStats(), ai: AI.RndDir, ...base };
 };
 
 const genPlayer = (base: UiAnimal): Player => {
