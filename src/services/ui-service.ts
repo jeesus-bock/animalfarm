@@ -29,11 +29,13 @@ export class UiService {
   constructor() {
     EventBus.getInstance().register(EventTypes.LevelUpdated, this.setLevelDiv);
     EventBus.getInstance().register(EventTypes.LevelAdded, this.refresh);
+    EventBus.getInstance().register(EventTypes.GroundTypeSelected, this.setSelectedGroundType);
   }
   // Decoupling of ECS from the UI required me to have
   // this extra object with the level drawn by ECS.
   // Updated with UppdateLevel bus event.
   private levelDiv: HTMLDivElement | null = null;
+  private selectedGroundType: number = 0;
   private setLevelDiv = (levelDiv: HTMLDivElement) => {
     if (this.levelDiv) {
       // DOMDiff library to see if the leveldiv has changed.
@@ -42,6 +44,12 @@ export class UiService {
     }
     LogService.getInstance().addLogItem('[UiService] Setting levelDiv', levelDiv);
     this.levelDiv = levelDiv;
+  };
+  setSelectedGroundType = (groundType: number) => {
+    this.selectedGroundType = groundType;
+  };
+  getSelectedGroundType = () => {
+    return this.selectedGroundType;
   };
   // Refresh is just for the UI/routing for now.
   // by is for debug purposes, should these be cleared?

@@ -39,6 +39,8 @@ export enum EventTypes {
 
   // bound to document.body.onkeydown
   KeyDown = 'KEY_DOWN',
+
+  GroundTypeSelected = 'GROUND_TYPE_SELECTED',
 }
 
 export interface User {
@@ -94,6 +96,7 @@ export enum Species {
   man = '🚹',
   bigNose = '👺',
   panda = '🐼',
+  vortex = '🌀',
 }
 
 export interface Stats {
@@ -152,7 +155,14 @@ export const genMatrix = (width: number, height: number) => {
       // 0 and 1 are impassable
       if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
         ret[y][x] = 0;
-      } else if (Math.round(Math.random() * 10) == 0) {
+      } else if (Math.round(Math.random() * 5) == 0) {
+        if (ret[y][x - 1] == 0 || ret[y - 1][x] == 0) {
+          ret[y][x] = 0;
+          continue;
+        } else if (ret[y - 1][x] == 1 || ret[y][x - 1] == 1) {
+          ret[y][x] = 1;
+          continue;
+        }
         ret[y][x] = Math.round(Math.random() * 2);
       } else {
         ret[y][x] = Math.round(Math.random() * 3) + 2;

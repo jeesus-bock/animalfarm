@@ -15,11 +15,9 @@ import { EventBus } from '../event-bus';
 const { div, select, option, label, button, input } = van.tags;
 let editedLevel: Level | null = null;
 let levelContainer = div();
-const editedId = van.state<string | undefined>('pekka');
 
 export const LevelsView = (levelDiv: HTMLDivElement) => {
   editedLevel = getSelectedLevel();
-  editedId.val = editedLevel?.id.toString();
   levelContainer = div({ class: 'level-container' }, levelDiv);
   return div({ className: 'levels-view' }, [
     TopNav(),
@@ -31,7 +29,7 @@ export const LevelsView = (levelDiv: HTMLDivElement) => {
           onchange: (e: any) => {
             selectLevel(e.target.value);
           },
-          value: editedId.val || 'jaska',
+          value: editedLevel?.id || 'jaska',
         },
         [
           ECSService.getInstance()
@@ -114,7 +112,8 @@ const selectLevel = (id: string) => {
 const setLevelContainer = (levelDiv: HTMLDivElement) => {
   levelContainer.innerHTML = '';
   van.add(levelContainer, levelDiv);
-  editedId.val = getSelectedLevel()?.id;
+  editedLevel = getSelectedLevel();
+  UiService.getInstance().refresh();
 };
 
 // Sort of ugly to run this whenever the module file is loaded.

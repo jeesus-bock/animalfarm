@@ -3,7 +3,10 @@ import { EventBus } from '../event-bus';
 import { AnimalService } from './animal-service';
 import { ECSService } from './ecs-service';
 import { LogService } from './log-service';
+
 import { SocketService } from './socket-service';
+export const groundTypes = { 0: 'wall', 1: 'water', 2: 'grass', 3: 'dirt', 4: 'dirt2', 5: 'dirt2' };
+
 export class LevelService {
   private static instance?: LevelService = undefined;
   public static getInstance(): LevelService {
@@ -17,7 +20,7 @@ export class LevelService {
     EventBus.getInstance().register(EventTypes.RequestAnimal, this.addAnimal);
   }
   public requestLevels = () => {
-    LogService.getInstance().addLogItem('[LevelService] requesting level');
+    LogService.getInstance().addLogItem('[LevelService] requesting levels');
     SocketService.getInstance().requestLevels();
   };
   public generateLevel = () => {

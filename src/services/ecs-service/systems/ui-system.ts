@@ -5,6 +5,7 @@ import { EventBus } from '../../../event-bus';
 import { UiService } from '../../../services/ui-service';
 import { LogService } from '../../../services/log-service';
 import { ECSService } from '..';
+import { groundTypes } from '../../level-service';
 
 const { div } = van.tags;
 
@@ -67,7 +68,6 @@ export const uiSystem = () => {
   EventBus.getInstance().dispatch<HTMLDivElement>(EventTypes.LevelUpdated, levelDiv);
 };
 
-const groundTypes = ['wall', 'water', 'grass', 'dirt', 'dirt2', 'dirt2'];
 const getSquareClass = (groundType: number, ent: UiObj | null, selectedUiObjId: string): string => {
   let retClasses = ['square'];
   retClasses.push(groundTypes[groundType]);
