@@ -12,6 +12,8 @@ const inanimateObjs = [
   { char: '⛺', name: 'pyramid' },
   { char: '💬', name: 'message' },
   { char: '💊', name: 'pill' },
+  { char: '🎒', name: 'backpack' },
+  { char: '🎃', name: 'pumpkin' },
 ];
 const animals: Array<Animal> = [
   {

@@ -21,7 +21,7 @@ export const initRoutes = (app: Express) => {
   });
   app.post('/levels', async (req: Request, res: Response) => {
     console.log('[end-point] /levels POST');
-    const level = LevelService.getInstance().getLevel(req.params.id);
+    const level = LevelService.getInstance().createLevel(req.body);
     if (!level) return res.status(404);
     return res.json(level);
   });
@@ -31,14 +31,12 @@ export const initRoutes = (app: Express) => {
     if (!level) return res.status(404);
     return res.json(level);
   });
+  console.log(getRoutes(app));
 };
 
 // WIP func to list all endpoints. Might later on be used in server<->server communication.
 const getRoutes = (app: Express) => {
-  console.log(
-    app._router.stack.level((l: any) => {
-      if (!l || !l.route) return '';
-      return l.route.path + ' ' + Object.keys(l.route.methods);
-    })
-  );
+  return app._router.stack.map((l: any) => {
+    if (l && l.route) return l.route.path + ' ' + Object.keys(l.route.methods);
+  });
 };
