@@ -7,3 +7,9 @@ IRC or Discord or whatever.
 
 ## Get in the project
 Leave a comment to https://github.com/jeesus-bock/animalfarm/issues/3 and I'll add you. Or just message me! After that create your own dev branch and start coding.
+
+## Stuff to maybe do
+- More API end-points to data-server. I'd venture there ought to be endpoints for player and species and animals at least.
+- Separate microservices. This provides the possibiity to use whatever language you want.
+- More species. This is fun stuff, looking for utf glyphs that would make good chars for the creatures on the animalfarm. I'm thinking we could use different languages like arabic or chinese to group the monsters.
+- Ui development. The UI is a stub at the moment. It should probably be actually designed. Good opportunity to learn figma etc.
