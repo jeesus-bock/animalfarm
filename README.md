@@ -3,7 +3,7 @@
 ## Getting started
 
 All the usual stuff, clone the repo, install deps. I've been using yarn as the package manager so the lock-files are as such. Not that it matters much.
-The front-end is in the `src/` directory as per usual and the back-end resides under `server/`
+The front-end is in the `src/` directory as per usual and the back-ends reside under `data-server/` and `socket-server/`
 
 ## Used tech
 
@@ -20,6 +20,7 @@ Installed npm dependencies:
 - And at the moment for the back-end:
   - https://expressjs.com/ as the go-to choice for server framework.
   - https://socket.io/ the duplex messaging system, websocket probably.
+  - https://typeorm.io/
 
 ### Libraries needed
 
@@ -59,8 +60,7 @@ It's a pretty big question whetyher or not we want to add database to the mix, b
 
 ### APIs and other interoperation
 
-At the moment there's common.ts file in the project root. This file includes interfaces for data types shared between the fe and be. I think MOST of the data types should be used on both so this will probably be turned to a directory and separate files. This out-of-source-dirs approach seems to be working fine, but it remains to be seen if it works in the long run. common.ts also includes the generator functions, these ought to be moved
-to the data-server modules.
+At the moment there's common.ts file in the project root. This file includes interfaces for data types shared between the fe and be. I think MOST of the data types should be used on both so this will probably be turned to a directory and separate files. This out-of-source-dirs approach seems to be working fine, but it remains to be seen if it works in the long run. common.ts also includes the generator functions, these ought to be moved to the data-server modules.
 
 The communication between the front and the back is accomplished by socket.io events and I've only scratched the surface of possibilities with the current version. This means there's no HTTP REST API. The events and their args can be fully typed so it's pretty cool. Dunno if it's smart at all but we're not at work here, relax.
 
@@ -75,3 +75,4 @@ Testbed for:
 - Cool libraries.
 - Software patterns.
 - AI stuff, nothing big or mainstream but homebrew simple stuff.
+Check out the README.md files in the subdirs for more information. Also if you happen to get interested, there's [CONTRIBUTING.md](https://github.com/jeesus-bock/animalfarm/edit/master/CONTRIBUTING.md) with some ideas.
