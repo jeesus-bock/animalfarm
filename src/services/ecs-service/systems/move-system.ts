@@ -19,6 +19,7 @@ export const moveSystem = () => {
       LogService.getInstance().addLogItem('[ECS] moveSystem bump' + (position.x + velocity.x) + '-' + (position.y + velocity.y));
       continue;
     }
+    LogService.getInstance().addLogItem('[ECS] moveSystem velocity ' + JSON.stringify(velocity));
     position.x += velocity.x;
     position.y += velocity.y;
     if (isPlayer) {

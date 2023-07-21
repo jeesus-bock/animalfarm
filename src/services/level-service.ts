@@ -5,7 +5,7 @@ import { ECSService } from './ecs-service';
 import { LogService } from './log-service';
 
 import { SocketService } from './socket-service';
-export const groundTypes = { 0: 'wall', 1: 'water', 2: 'grass', 3: 'dirt', 4: 'dirt2', 5: 'dirt2' };
+export const groundTypes: Array<string> = ['wall', 'water', 'dirt', 'grass', 'bush', 'dirt2'];
 
 export class LevelService {
   private static instance?: LevelService = undefined;

@@ -75,29 +75,30 @@ export enum AI {
   Player = 'PLAYER',
 }
 
-export enum Species {
-  penguin = '🐧',
-  rider = '🏇',
-  monkey = '🙉',
-  bee = '🐝',
-  snake = '🐍',
-  tracktor = '🚜',
-  ghost = '👻',
-  camel = '🐫',
-  dromedar = '🐪',
-  goat = '🐐',
-  carouselHorse = '🎠',
-  twins = '👯',
-  pig = '🐷',
-  chicken = '🐓',
-  chick = '🐤',
-  devil = '😈',
-  woman = '🚺',
-  man = '🚹',
-  bigNose = '👺',
-  panda = '🐼',
-  vortex = '🌀',
-}
+// TODO create species objects with attributes, such as color and species name etc.
+export const Species = {
+  penguin: '🐧',
+  rider: '🏇',
+  monkey: '🙉',
+  bee: '🐝',
+  snake: '🐍',
+  tracktor: '🚜',
+  ghost: '👻',
+  camel: '🐫',
+  dromedar: '🐪',
+  goat: '🐐',
+  carouselHorse: '🎠',
+  twins: '👯',
+  pig: '🐷',
+  chicken: '🐓',
+  chick: '🐤',
+  devil: '😈',
+  woman: '🚺',
+  man: '🚹',
+  bigNose: '👺',
+  panda: '🐼',
+  vortex: '🌀',
+};
 
 export interface Stats {
   att: number;
@@ -196,7 +197,7 @@ const randomGlyph = () => {
 const genName = () => {
   return testNames[Math.floor(Math.random() * testNames.length)];
 };
-const genSpecies = (): Species => {
+const genSpecies = (): string => {
   return Species.penguin;
 };
 const genHealth = (): Health => {

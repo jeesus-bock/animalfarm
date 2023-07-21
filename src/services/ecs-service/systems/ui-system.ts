@@ -70,7 +70,8 @@ export const uiSystem = () => {
 
 const getSquareClass = (groundType: number, ent: UiObj | null, selectedUiObjId: string): string => {
   let retClasses = ['square'];
-  retClasses.push(groundTypes[groundType]);
+  const gt = groundTypes[groundType];
+  retClasses.push(gt);
   if (ent) retClasses.push('has-obj');
   if (ent && ent.id == selectedUiObjId) retClasses.push('selected');
   return retClasses.join(' ');

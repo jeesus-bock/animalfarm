@@ -67,7 +67,7 @@ export class ECSService {
   // The order is important: first the ai does it's magic
   // Then we move the object accordingly,
   // and last we render the level with the objects on top.
-  private systems = [aiSystem, moveSystem, uiSystem];
+  private systems = [aiSystem, moveSystem, uiSystem, uiSystem];
 
   // Counts ticks
   private systemRunCount = 0;

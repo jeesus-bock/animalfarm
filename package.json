@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "typescript": "*",
-    "vite": "^4.3.2"
+    "vite": "^4.4.6"
   },
   "dependencies": {
     "date-fns": "^2.30.0",
-    "diff-dom": "^5.0.4",
-    "miniplex": "^2.0.0-beta.3",
+    "diff-dom": "^5.0.7",
+    "miniplex": "^2.0.0",
     "short-uuid": "^4.2.2",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.7.1"
   }
 }
