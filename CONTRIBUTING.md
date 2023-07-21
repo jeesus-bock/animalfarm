@@ -14,4 +14,5 @@ Leave a comment to https://github.com/jeesus-bock/animalfarm/issues/3 and I'll a
 - More species. This is fun stuff, looking for utf glyphs that would make good chars for the creatures on the animalfarm. I'm thinking we could use different languages like arabic or chinese to group the monsters into gangs or something.
 - Ui development. The UI is a stub at the moment. It should probably be actually designed. Good opportunity to learn figma etc.
   - Microfrontends! I've only heard this buzzword around but never really studied it.
-  - WebComponents. These could be nifty to use with VanJS.
+  - WebComponents. These could be nifty to use with VanJS and would support the microservice thing. Opens up chances for https://github.com/lit/lit and Svelte and whatnot.
+- CI/CD This provides tons of possibilities. I have a few VPSes but also interested in free hosting services like netlify and vercel etc. Even converting the backend(s) to run serverless!
