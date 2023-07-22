@@ -11,6 +11,7 @@ Leave a comment to https://github.com/jeesus-bock/animalfarm/issues/3 and I'll a
 ## Stuff to maybe do
 - More API end-points to data-server. I'd venture there ought to be endpoints for player and species and animals at least.
 - Separate microservices. This provides the possibiity to use whatever language you want.
+- Database connectivity is always intriguing to get working. Data-server uses sqlite at the moment, but it could be using mysql or postgres or some nosql solution.
 - More species. This is fun stuff, looking for utf glyphs that would make good chars for the creatures on the animalfarm. I'm thinking we could use different languages like arabic or chinese to group the monsters into gangs or something.
 - Ui development. The UI is a stub at the moment. It should probably be actually designed. Good opportunity to learn figma etc.
   - Microfrontends! I've only heard this buzzword around but never really studied it.
